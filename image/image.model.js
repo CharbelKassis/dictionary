@@ -7,8 +7,8 @@ export default class ImageModel {
      * @param {number} nbOfImages 
      */
     constructor(nbOfImages) {
-        this.word = ""; //The word associated with the images
-        this.lang = ""; //The language of the word
+        this.__word = ""; //The word associated with the images
+        this.__lang = ""; //The language of the word
         this.__imagesUrl = []; //The urls of the images
         this.__observers = [];
         this.__imageRepository = new ImageRepository(); //The class responsible to fetch the images
