@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Definitions</title>
+    <script type="module" src="app.js"></script>
+    <link rel="stylesheet" href="./style/app.css">
+</head>
+<body>
+    <div class="flexbox" id="input">
+        <div id="definitionsInput">
+            <select id="selectedDictionary"></select>
+            <input id="userInput" type="text">
+            <button type="button" id="searchButton">Search</button>
+        </div>
+    </div>
+    <div class="flexbox" id="output">
+        <div id="definitionsOutput">
+            <textarea id="resultsArea" disabled="disabled"></textarea>
+            <button type="button" id="clearButton">Clear</button>
+        </div>
+        <div id="imageOutput"></div>
+    </div>
+</body>
+</html>
