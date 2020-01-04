@@ -54,6 +54,6 @@ export default class ImageModel {
     __notify(message) {
         this.__observers.forEach(observer=>{
             observer.update(message,this);
-        })
+        });
     }
 }

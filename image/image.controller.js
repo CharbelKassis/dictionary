@@ -1,6 +1,5 @@
 import ImageModel from "./image.model.js";
-import ImageView from "./image.view.js"
-import DefinitionsController from "../definitions/definitions.controller.js"
+import ImageView from "./image.view.js";
 
 export default class ImageController {
 
@@ -51,7 +50,7 @@ export default class ImageController {
     __notify(change) {
         this.__observers.forEach(observer=>{
             observer.update(change,this);
-        })
+        });
     }
 
     update(message,subject) {

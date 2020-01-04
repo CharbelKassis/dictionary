@@ -41,7 +41,7 @@ export default class DefinitionsView {
                 ? definition+"\n\n" 
                 : definition
         );
-        this.__clear.disabled = false;
+        this.__clear.disabled = false; 
     }
 
     /* Remove the definitions from the designed component. */

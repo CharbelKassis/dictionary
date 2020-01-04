@@ -135,7 +135,7 @@ export default class DefinitionsModel {
     __notify(message) {
         this.__observers.forEach(observer=>{
             observer.update(message,this);
-        })
+        });
     }
 
 }

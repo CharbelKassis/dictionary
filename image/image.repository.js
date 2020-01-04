@@ -26,7 +26,7 @@ export default class ImageRepository {
      * @param {String} word 
      */
     __getUrl(word,lang) {
-        return `${this.__url}?key=${this.__apiKey}&q=${word.replace(" ","+")}&image_type=photo&lang=${lang}`
+        return `${this.__url}?key=${this.__apiKey}&q=${word.replace(" ","+")}&image_type=all&lang=${lang}`
     }
 
 }

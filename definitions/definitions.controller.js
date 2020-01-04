@@ -37,7 +37,7 @@ export default class DefinitionsController {
         document.addEventListener("DOMContentLoaded",()=>{
             /* Add main event listeners */
             this.__userInput.addEventListener("keydown",e=>{
-                if(e.key === "Enter") this.__notify("definitions");
+                if(e.key === "Enter") this.__search.focus();
             });
             this.__search.addEventListener("click",e=>{
                 this.__notify("definitions");
@@ -77,7 +77,7 @@ export default class DefinitionsController {
     __notify(message) {
         this.__observers.forEach(observer=>{
             observer.update(message,this);
-        })
+        });
     }
 
     update(message,subject) {
