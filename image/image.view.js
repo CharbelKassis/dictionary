@@ -1,7 +1,10 @@
+import Slider from "../widget/slider.js";
+
 export default class ImageView {
 
     constructor() {
         this.__imageOutput = document.getElementById("imageOutput");
+        this.__slider = new Slider();
     }
 
     /**
@@ -9,21 +12,21 @@ export default class ImageView {
      * @param {String[]} imagesUrl 
      */
     showImages(imagesUrl) {
-        imagesUrl.forEach(url=>{
+        const imgs = imagesUrl.map(url=>{
             const img = document.createElement("img");
-            img.onload = e => img.classList.remove("loading");
-            img.classList.add("loading");
             img.src = url;
-            img.classList.add("images");
-            this.__imageOutput.appendChild(img);
+            img.alt = url;
+            img.onerror = e => {img.src = "./style/error.png"};
+            img.className = "image loading";
+            img.onload = e => {e.target.classList.remove("loading");this.__imageOutput.classList.remove("loading")};
+            return img;
         })
-
+        this.__slider.sliderItems = imgs;
+        this.__imageOutput.classList.add("loading");
+        this.__imageOutput.appendChild(this.__slider.getSlider());
     }
 
     clearImages() {
-        const images = document.querySelectorAll(".images");
-
-        if(images)
-            images.forEach(image=>{image.remove();});
+        this.__imageOutput.innerHTML = "";
     }
 }

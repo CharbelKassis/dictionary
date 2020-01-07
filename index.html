@@ -5,23 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Definitions</title>
-    <script type="module" src="app.js"></script>
-    <link rel="stylesheet" href="./style/app.css">
+    <script type="module" src="./app.js"></script>
+    <link rel="stylesheet" href="./style/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
 </head>
 <body>
-    <div class="flexbox" id="input">
-        <div id="definitionsInput">
+    <div id="input">
+        <div id="definitionsInput" class="center">
             <select id="selectedDictionary"></select>
             <input id="userInput" type="text">
             <button type="button" id="searchButton">Search</button>
         </div>
     </div>
-    <div class="flexbox" id="output">
+    <div id="output">
         <div id="definitionsOutput">
             <textarea id="resultsArea" disabled="disabled"></textarea>
             <button type="button" id="clearButton">Clear</button>
         </div>
-        <div id="imageOutput"></div>
+        <div id="imageOutput" class="center">
+        </div>
     </div>
+
 </body>
 </html>

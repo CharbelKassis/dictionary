@@ -1,6 +1,7 @@
 export default class DefinitionsView {
 
     constructor() {
+        this.__definitionsOutput = document.getElementById("definitionsOutput");
         this.__resultsArea = document.getElementById("resultsArea");
         this.__selectedDict = document.getElementById("selectedDictionary");
         this.__search = document.getElementById("searchButton");
@@ -41,13 +42,17 @@ export default class DefinitionsView {
                 ? definition+"\n\n" 
                 : definition
         );
-        this.__clear.disabled = false; 
+        this.__clear.disabled = false;
+        this.__clear.style.visibility = "visible";
+        this.__resultsArea.classList.remove("clear");
     }
 
     /* Remove the definitions from the designed component. */
     clearDefinitions() {
         this.__resultsArea.value = "";
+        this.__resultsArea.classList.add("clear");
         this.__clear.disabled = true;
+        this.__clear.style.visibility = "hidden";
     }
 
     /* Populate the option element with the name of the dictionaries */

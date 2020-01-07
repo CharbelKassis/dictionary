@@ -17,7 +17,7 @@ const dictionaries = [
 ]
 
 const definitions = new Definitions(dictionaries);
-const image = new Image(6);
+const image = new Image(7);
 
 definitions.model.subscribe(image.controller); //observe the changes in the definitions model to show images
 
