@@ -2,10 +2,12 @@ export default class Slider {
 
     /**
      * 
-     * @param {NodeListOf<Node>} nodes 
+     * @param {NodeListOf<Node>} nodes
+     * @param {string} 
      */
-    constructor(nodes=undefined) {
+    constructor(nodes=undefined,slidingBehavior=Slider.reverseTranslation) {
         this.sliderItems = nodes;
+        this.slidingBehavior = slidingBehavior;
     }
 
     /**
@@ -15,20 +17,91 @@ export default class Slider {
         if(nodes !== undefined) {
             this.__slider = this.__createSlider(nodes);
             this.__sliderItems = this.__slider.querySelectorAll(".slider-item");
-    
-            this.__slider.querySelector(".slider-arrow-left").addEventListener("click",e=>this.moveLeft());
-            this.__slider.querySelector(".slider-arrow-right").addEventListener("click",e=>this.moveRight());
+            const sliderList = this.__slider.querySelector(".slider-list");
+
+            this.__leftArrow = this.__slider.querySelector(".slider-arrow-left");
+            this.__rightArrow = this.__slider.querySelector(".slider-arrow-right");
+
+            this.__leftArrow.addEventListener("click",e=>this.moveLeft());
+            this.__rightArrow.addEventListener("click",e=>this.moveRight());
+            sliderList.addEventListener("click",this.slidingBehavior);
         }
+    }
+
+    /**
+     * 
+     * @param {number} behavior -The behavior of the slider when clicking inside the Slider. Possible values: 
+     * 
+     * Slider.reverseTranslation: This will move the slider the opposite way of where the user clicked. This is used to move the items in the direction you clicked closer to the middle.
+     * 
+     * Slider.translation: This will move the slider the direction you clicked. It's similar to clicking the arrows.
+     * 
+     * Slider.itemMoving: Similar to reverseTranslation, except the slider will keep moving until the item selected is in the center. Not clicking on an item will not move the slider.
+     */
+    set slidingBehavior(behavior) {
+        this.__slidingBehavior = 
+        {
+            [Slider.reverseTranslation]: e => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const middleX = (rect.left + rect.width) / 2
+                if(e.clientX < middleX)
+                    this.moveRight();
+                else
+                    this.moveLeft();
+            },
+        
+            [Slider.translation]: e => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const middleX = (rect.left + rect.width) / 2
+                if(e.clientX < middleX)
+                    this.moveLeft();
+                else
+                    this.moveRight();
+            },
+            [Slider.itemMoving]: e=> {
+
+                
+
+                if(e.target.classList.contains("slider-item-content") && !e.target.parentElement.classList.contains("slider-item-center")) {
+                    const items =  [...e.currentTarget.querySelectorAll(".slider-item")];
+                    const targetIndex = items.findIndex(item => item === e.target.parentElement);
+                    const centerIndex = items.findIndex(item => item.classList.contains("slider-item-center"));
+                    
+                    if(e.target.parentElement.classList.contains("slider-item-left"))
+                        for(let i=0;i<centerIndex-targetIndex;i++)
+                            this.moveRight();
+                    
+                    else
+                        for(let i=0;i<targetIndex-centerIndex;i++)
+                            this.moveLeft();
+                }
+            }
+        }[behavior];
+    }
+
+    /**
+     * @return {Function} -The behavior of the slider when clicking inside it.
+     */
+    get slidingBehavior() {
+        return this.__slidingBehavior;
     }
 
     moveLeft(){
         if(this.__items[this.__items.length-1].side !== "center") //do not move left if the last item on the list is the center
-            this.__items.slice().reverse().forEach((item,index)=>item.moveLeft(index));
+            this.__items.slice().reverse().forEach((item,index)=>item.moveLeft(this.__items.length-index-1,index));
+        if(this.__items[this.__items.length-1].side === "center") //if the last item is the center after the translation, hide the left arrow
+            this.__leftArrow.style.visibility = "hidden";
+        if(this.__rightArrow.style.visibility === "hidden")
+            this.__rightArrow.style.visibility = "visible";
     }
     
     moveRight() {
         if(this.__items[0].side !== "center" ) //do not move right if the first item on the list is the center
-            this.__items.forEach((item,index)=>item.moveRight(index));
+            this.__items.forEach((item,index)=>item.moveRight(index,this.__items.length-index-1));
+        if(this.__items[0].side === "center") //if the last item is the center after the translation, hide the right arrow
+            this.__rightArrow.style.visibility = "hidden";
+        if(this.__leftArrow.style.visibility === "hidden")
+            this.__leftArrow.style.visibility = "visible";
     }
 
     getSlider() {
@@ -102,6 +175,10 @@ export default class Slider {
 
 }
 
+Slider.reverseTranslation = 0;
+Slider.translation = 1;
+Slider.itemMoving = 2;
+
 class SliderItem {
     /**
      * 
@@ -113,7 +190,7 @@ class SliderItem {
      */
     constructor(node,translation=0,left=null,right=null) {
         this.node = node;
-        this.translation = translation;
+        this.translation = Math.round(translation);
         this.isStacked = false;
         this.right = right;
         this.left = left;
@@ -136,12 +213,20 @@ class SliderItem {
     set position(x) {
         this.node.style.right = x+"%";
     }
-    moveRight() {
+
+    /**
+     * 
+     * @param {number} rightIndex -the position of the slider item in the list starting from the right
+     * @param {number} leftIndex -the position of the slider item in the list starting from the left
+     */
+    moveRight(rightIndex,leftIndex) {
         if(this.side !== "left") {
             if(this.right && !this.isStacked) {
                 this.position = this.position-this.translation;
-                if((this.right.isStacked && this.right.right) || (!this.right.right && Math.round(this.right.position) === 0))
+                if((this.right.isStacked && this.right.right) || (!this.right.right && Math.round(this.right.position) === 0)) {
+                    this.position = this.position + leftIndex;
                     this.isStacked = true;
+                }
             }
             else if(!this.right) {
                 if(Math.round(this.position) !== 0)
@@ -154,7 +239,7 @@ class SliderItem {
                 this.position = this.position-this.translation;
             }
             else if(this.left && !this.right.isStacked) {
-                this.position = this.position-this.translation;
+                this.position = this.position-this.translation + rightIndex;
                 this.isStacked = false;
             }
             else if(!this.right.isStacked) {
@@ -175,12 +260,20 @@ class SliderItem {
         }
     }
 
-    moveLeft() {
+    /**
+     * 
+     * @param {number} rightIndex -the position of the slider item in the list starting from the right
+     * @param {number} leftIndex -the position of the slider item in the list starting from the left
+     */
+    moveLeft(rightIndex,leftIndex) {
         if(this.side !== "right") {
             if(this.left && !this.isStacked) {
                 this.position = this.position+this.translation;
-                if((this.left.isStacked && this.left.left) || (!this.left.left && Math.round(this.left.position) === 0))
+                if((this.left.isStacked && this.left.left) || (!this.left.left && Math.round(this.left.position) === 0)) {
+                    this.position = this.position - rightIndex;
                     this.isStacked = true;
+                }
+
             }
             else if(!this.left) {
                 if(Math.round(this.position) !== 0)
@@ -193,7 +286,7 @@ class SliderItem {
                 this.position = this.position+this.translation;
             }
             else if(this.right && !this.left.isStacked) {
-                this.position = this.position+this.translation;
+                this.position = this.position+this.translation - leftIndex;
                 this.isStacked = false;
             }
             else if(!this.left.isStacked) {

@@ -5,6 +5,7 @@ export default class ImageView {
     constructor() {
         this.__imageOutput = document.getElementById("imageOutput");
         this.__slider = new Slider();
+        this.__slider.slidingBehavior = Slider.itemMoving;
     }
 
     /**
