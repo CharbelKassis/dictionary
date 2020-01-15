@@ -59,10 +59,9 @@ export default class Slider {
                     this.moveRight();
             },
             [Slider.itemMoving]: e=> {
-
-                
-
-                if(e.target.classList.contains("slider-item-content") && !e.target.parentElement.classList.contains("slider-item-center")) {
+                const isSliderItem = e.target.classList.contains("slider-item-content");
+                const isNotCenter = !e.target.parentElement.classList.contains("slider-item-center");
+                if( isSliderItem && isNotCenter ) {
                     const items =  [...e.currentTarget.querySelectorAll(".slider-item")];
                     const targetIndex = items.findIndex(item => item === e.target.parentElement);
                     const centerIndex = items.findIndex(item => item.classList.contains("slider-item-center"));
@@ -70,7 +69,6 @@ export default class Slider {
                     if(e.target.parentElement.classList.contains("slider-item-left"))
                         for(let i=0;i<centerIndex-targetIndex;i++)
                             this.moveRight();
-                    
                     else
                         for(let i=0;i<targetIndex-centerIndex;i++)
                             this.moveLeft();

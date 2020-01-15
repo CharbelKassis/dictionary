@@ -28,7 +28,7 @@
 }
 
 .slider-item {
-    height: 130%;
+    height: 100%;
     position: relative;
     right: 0;
     top: 0;
@@ -52,7 +52,7 @@
 } 
 
 .slider-item-center {
-    transform: rotateY(0) scale(2);
+    transform: rotateY(0) scale(2) translateZ(100px);
 }
 
 .slider-item-content {

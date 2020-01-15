@@ -13,7 +13,7 @@ import Image from "./image/image.js"
 const dictionaries = [
     new Larousse(),
     new LeDictionnaire(),
-    new MerriamWebster
+    new MerriamWebster()
 ]
 
 const definitions = new Definitions(dictionaries);
