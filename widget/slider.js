@@ -27,6 +27,11 @@ export default class Slider {
             sliderList.addEventListener("click",this.slidingBehavior);
         }
     }
+    
+    set arrowColor(color) {
+        this.__leftArrow.style.color = color;
+        this.__rightArrow.style.color = color;
+    }
 
     /**
      * 
