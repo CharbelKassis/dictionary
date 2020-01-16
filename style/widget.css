@@ -2,9 +2,7 @@
     display: flex;
     width: 100%;
     --rotation: 60deg;
-    --translation: 35%;
     --brightness: 40%;
-    --height: 150px;
 }
 
 .slider-list {

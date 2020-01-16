@@ -1,0 +1,8 @@
+@import "./app.css";
+@import "./widget.css";
+
+/* move the slider slightly to the left because the "x" button is taken into account in the flexbox */
+.slider {
+    position: relative;
+    right: calc(var(--xSize)/2);
+}

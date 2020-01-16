@@ -6,8 +6,24 @@ export default class Slider {
      * @param {string} 
      */
     constructor(nodes=undefined,slidingBehavior=Slider.reverseTranslation) {
+        this.__slider = document.createElement("div")
+        const sliderTemplate = 
+            `<span class="slider-arrow slider-arrow-left"><i class="fas fa-arrow-left"></i></span>
+                <ul class="slider-list"></ul>
+            <span class="slider-arrow slider-arrow-right"><i class="fas fa-arrow-right"></i></span>`;
+        this.__slider.classList.add("slider");
+        this.__slider.innerHTML = sliderTemplate;
+
+        this.__sliderList = this.__slider.querySelector(".slider-list");
+        this.__leftArrow = this.__slider.querySelector(".slider-arrow-left");
+        this.__rightArrow = this.__slider.querySelector(".slider-arrow-right");
+        
         this.sliderItems = nodes;
         this.slidingBehavior = slidingBehavior;
+
+        this.__sliderList.addEventListener("click",e=>this.slidingBehavior(e));
+        this.__leftArrow.addEventListener("click",e=>this.moveLeft());
+        this.__rightArrow.addEventListener("click",e=>this.moveRight());
     }
 
     /**
@@ -15,16 +31,8 @@ export default class Slider {
      */
     set sliderItems(nodes=undefined) {
         if(nodes !== undefined) {
-            this.__slider = this.__createSlider(nodes);
-            this.__sliderItems = this.__slider.querySelectorAll(".slider-item");
-            const sliderList = this.__slider.querySelector(".slider-list");
-
-            this.__leftArrow = this.__slider.querySelector(".slider-arrow-left");
-            this.__rightArrow = this.__slider.querySelector(".slider-arrow-right");
-
-            this.__leftArrow.addEventListener("click",e=>this.moveLeft());
-            this.__rightArrow.addEventListener("click",e=>this.moveRight());
-            sliderList.addEventListener("click",this.slidingBehavior);
+            this.__createSlider(nodes);
+            this.__createSliderItems(this.__sliderList.querySelectorAll(".slider-item"));
         }
     }
     
@@ -113,16 +121,7 @@ export default class Slider {
 
     /**
      * 
-     * @param {NodeListOf<Node>} nodeList 
-     */
-    set __sliderItems(nodeList) {
-        this.__items = SliderItem.from(nodeList);
-    }
-
-    /**
-     * 
      * @param {NodeListOf<Node>} nodeList -The content that will go inside the slider
-     * @return {Node} -The slider
      */
     __createSlider(nodeList) {
 
@@ -131,7 +130,7 @@ export default class Slider {
          * @param {Node} node -The content of the slider item 
          * @param {string} className -Either "slider-item-left", "slider-item-center" or "slider-item-right"
          */
-        function createSliderItem(node,className,zIndex) {
+        const createSliderItem = (node,className,zIndex) =>  {
             node.classList.add("slider-item-content");
             const sliderItem = document.createElement("li");
             sliderItem.style.width = `calc(100%/${nodeList.length})`;
@@ -139,23 +138,16 @@ export default class Slider {
             sliderItem.appendChild(node);
             sliderItem.classList.add(className);
             sliderItem.classList.add("slider-item");
-            sliderList.appendChild(sliderItem);
+            this.__sliderList.appendChild(sliderItem);
         }
 
-        const slider = document.createElement("div")
-        const sliderTemplate = 
-            `<span class="slider-arrow slider-arrow-left"><i class="fas fa-arrow-left"></i></span>
-                <ul class="slider-list"></ul>
-            <span class="slider-arrow slider-arrow-right"><i class="fas fa-arrow-right"></i></span>`
-        slider.classList.add("slider");
-        slider.innerHTML = sliderTemplate;
-        
-        const sliderList = slider.querySelector(".slider-list");
+        this.__sliderList.innerHTML = "";
 
         if(nodeList.length % 2 !== 0) {
             [...nodeList].slice(0,(nodeList.length-1)/2).forEach(node=>{
                 createSliderItem(node,"slider-item-left",0);
             });
+
             createSliderItem(nodeList[(nodeList.length-1)/2],"slider-item-center",0);
 
             [...nodeList].slice(((nodeList.length-1)/2)+1,nodeList.length).forEach((node,index)=>{
@@ -167,13 +159,21 @@ export default class Slider {
             [...nodeList].slice(0,nodeList.length/2).forEach(node=>{
                 createSliderItem(node,"slider-item-left",0);
             });
+
             createSliderItem(nodeList[nodeList.length/2],"slider-item-center",0);
+
             [...nodeList].slice((nodeList.length/2) + 1,nodeList.length).forEach((node,index)=>{
                 createSliderItem(node,"slider-item-right",index+1);
-            })
+            });
         }
+    }
 
-        return slider;
+    /**
+     * 
+     * @param {NodeListOf<Node>} nodeList 
+     */
+    __createSliderItems(nodeList) {
+        this.__items = SliderItem.from(nodeList);
     }
 
 }

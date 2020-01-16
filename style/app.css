@@ -1,3 +1,7 @@
+:root {
+    --xSize: 2rem;
+}
+
 input,select {
     border-radius: 5px;
 }
@@ -37,7 +41,7 @@ input,select {
 }
 
 #input {
-    height: 25vh;
+    height: 15vh;
 }
 
 #output {
@@ -90,19 +94,15 @@ input,select {
 }
 
 #hideImages {
-    --size: 2rem;
-
     position: relative;
-    font-size: var(--size);
+    font-size: var(--xSize);
     font-family: sans-serif;
     text-align: center;
     color: red;
-    width: var(--size);
-    height: var(--size);
-    bottom: 25%;
-    left: 90%;
-    transform: translateY(10px);
-    border: solid red 1px;
+    width: var(--xSize);
+    height: var(--xSize);
+    bottom: 25vh;
+    left: calc(90vw - var(--xSize));
 }
 
 button, #showImages {
