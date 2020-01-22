@@ -18,7 +18,7 @@ input,select {
 }
 
 .loading {
-    background: url(/dictionary/pic/loading.gif);
+    background: url(/pic/loading.gif);
     background-position: center;
     background-repeat: no-repeat;
 }

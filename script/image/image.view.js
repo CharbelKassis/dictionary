@@ -18,7 +18,7 @@ export default class ImageView {
             const img = document.createElement("img");
             img.src = url;
             img.alt = url;
-            img.onerror = e => {img.src = "/dictionary/pic/error.png"};
+            img.onerror = e => {img.src = "/pic/error.png"};
             img.className = "image loading";
             img.onload = e => {e.target.classList.remove("loading");this.__imageOutput.classList.remove("loading")};
             return img;

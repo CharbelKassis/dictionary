@@ -1,11 +1,14 @@
 import Dictionary from "../dictionary/dictionary.js";
+import Model from "../mvc/Model.js";
 
-export default class DefinitionsModel {
+export default class DefinitionsModel extends Model {
     /**
      * 
-     * @param {Dictionary[]} dictionaries 
+     * @param {Dictionary[]} dictionaries -The list of dictionaries.
      */
     constructor(dictionaries) {
+        super();
+
         /**
          * @type {Map<String,Dictionary>}
         */
@@ -15,9 +18,6 @@ export default class DefinitionsModel {
         this.__curDict = undefined; //The current dictionary
         this.__word = ""; //The current word
         this.__loading = false; //if loading is needed
-
-        //The observers that need to be notified if a changed happened in this model
-        this.__observers = []; 
     }
 
     /* Method that returns the list of definitions of the current word inputed by the user for the selected dictionary */
@@ -71,15 +71,13 @@ export default class DefinitionsModel {
         this.__notify("word");
     }
 
-    /* Method that returns an Iterable of the dictionary names */
+    /* Method that returns an IterableIterator of the dictionary names */
     /**
      * @returns {IterableIterator<string>}
      */
     get dictionaryNames() {
         return this.__dictMap.keys();
     }
-
-
 
     /* Method that interacts with the dictionary classes to extract the definitions based of the currently selected dictionary and inputed word */
     __getDefinitions() {
@@ -120,22 +118,10 @@ export default class DefinitionsModel {
         });
     }
 
-    subscribe(observer) {
-        if(!this.__observers.includes(observer)) {
-            this.__observers.push(observer);
-        }
-    }
-
     update(message,observer) {
         switch(message) {
             case "definitions": this.__getDefinitions();
         }
-    }
-
-    __notify(message) {
-        this.__observers.forEach(observer=>{
-            observer.update(message,this);
-        });
     }
 
 }

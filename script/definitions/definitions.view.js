@@ -1,6 +1,9 @@
-export default class DefinitionsView {
+import View from "../mvc/View.js";
+
+export default class DefinitionsView extends View {
 
     constructor() {
+        super();
         this.__definitionsOutput = document.getElementById("definitionsOutput");
         this.__resultsArea = document.getElementById("resultsArea");
         this.__selectedDict = document.getElementById("selectedDictionary");
