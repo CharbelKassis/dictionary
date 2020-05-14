@@ -46,7 +46,10 @@ export default class Dictionary {
         }
         catch(err) {
             if(window.console) window.console.clear(); //remove the CORS error
-            response = await fetch(Dictionary.corsProxy+this.__url+word);
+            const url = Dictionary.corsProxy+this.__url+word;
+            response = await fetch(url, {
+                method: "POST"
+            });
         }
         const content = await response.text();
         const html = new DOMParser().parseFromString(content,"text/html");
@@ -73,4 +76,4 @@ export default class Dictionary {
 }
 
 Dictionary.abstractError = "Abstract method. Must be implemented in a subclass.";
-Dictionary.corsProxy = "https://api.codetabs.com/v1/proxy?quest=";
+Dictionary.corsProxy = "/dictionary?q=";
